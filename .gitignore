@@ -1,0 +1,5 @@
+# Project exclude paths
+/target/
+/src/main/resources/application.properties
+/sweatter.iml
+/src/main/resources/static/
