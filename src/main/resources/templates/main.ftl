@@ -13,9 +13,8 @@
     </form>
 </div>
     <div> Список сообщений </div>
-    <form method = "post" action = "filter">
-        <input type="text" name="filter" autocomplete="off">
-        <input type="hidden" name="_csrf" value="${_csrf.token}">
+    <form method = "get" action = "/main">
+        <input type="text" name="filter" autocomplete="off" value=${filter!}>
         <button type="submit"> Найти </button>
     </form>
     <form method="get" action="clear">
