@@ -75,10 +75,4 @@ public class MainController {
         model.put("messages", messages);
         return "main";
     }
-
-    @RequestMapping(path="/clear")
-    public String clear(){
-        messageRepo.deleteAll();
-        return "main";
-    }
 }
