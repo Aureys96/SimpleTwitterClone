@@ -1,6 +1,10 @@
 package com.example.sweatter.domain;
 
+
+import org.hibernate.validator.constraints.Length;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 public class Message {
@@ -8,7 +12,10 @@ public class Message {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @NotBlank(message = "Message should not be blank")
+    @Length(max = 2048, message = "message size exceeded")
     private String text;
+    @Length(max = 255, message = "tag size exceeded")
     private String tag;
 
     @ManyToOne(fetch = FetchType.EAGER)
