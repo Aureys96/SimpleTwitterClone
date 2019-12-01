@@ -1,6 +1,5 @@
 package com.example.sweatter.domain;
 
-
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
@@ -19,16 +18,13 @@ public class Message {
     private String tag;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn (name = "user_id")
+    @JoinColumn(name = "user_id")
     private User author;
 
     private String filename;
 
-    public String getAuthorName(){
-        return author != null ? author.getUsername() : "<none>";
+    public Message() {
     }
-
-    public Message(){}
 
     public Message(String text, String tag, User user) {
         this.author = user;
@@ -36,6 +32,9 @@ public class Message {
         this.tag = tag;
     }
 
+    public String getAuthorName(){
+        return author != null ? author.getUsername() : "<none>";
+    }
     public Long getId() {
         return id;
     }

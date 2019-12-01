@@ -17,25 +17,27 @@ import java.util.Map;
 public class RegistrationController {
     @Autowired
     private UserService userService;
+
     @GetMapping("/registration")
-    public String registration(){
+    public String registration() {
         return "registration";
     }
 
-    @PostMapping ("/registration")
-    public String addUser(@Valid User user, BindingResult bindingResult, Model model){
-        if (user.getPassword() != null && !user.getPassword().equals(user.getPassword2())){
-            model.addAttribute("passwordError", "Passwords are not equal!");
-            return "registration";
+    @PostMapping("/registration")
+    public String addUser(@Valid User user, BindingResult bindingResult, Model model) {
+        if (user.getPassword() != null && !user.getPassword().equals(user.getPassword2())) {
+            model.addAttribute("passwordError", "Passwords are different!");
         }
-        if (bindingResult.hasErrors()){
+
+        if (bindingResult.hasErrors()) {
             Map<String, String> errors = ControllerUtils.getErrors(bindingResult);
 
             model.mergeAttributes(errors);
 
             return "registration";
         }
-         if (!userService.addUser(user)){
+
+        if (!userService.addUser(user)) {
             model.addAttribute("usernameError", "User exists!");
             return "registration";
         }
@@ -44,12 +46,12 @@ public class RegistrationController {
     }
 
     @GetMapping("/activate/{code}")
-    public String activate(Model model, @PathVariable String code){
+    public String activate(Model model, @PathVariable String code) {
         boolean isActivated = userService.activateUser(code);
 
-        if (isActivated){
+        if (isActivated) {
             model.addAttribute("message", "User successfully activated!");
-        } else{
+        } else {
             model.addAttribute("message", "Activation failed");
         }
 

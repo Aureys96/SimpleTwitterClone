@@ -1,4 +1,5 @@
 package com.example.sweatter.controller;
+
 import com.example.sweatter.domain.Message;
 import com.example.sweatter.domain.User;
 import com.example.sweatter.repos.MessageRepo;
@@ -8,22 +9,16 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.stream.Collectors;
-
-import static java.util.UUID.randomUUID;
 
 @Controller
 public class MainController {
@@ -39,28 +34,32 @@ public class MainController {
     }
 
     @GetMapping("/main")
-    public String main(@RequestParam(required = false, defaultValue = "") String filter, Model model){
-       Iterable<Message> messages = messageRepo.findAll();
-        if (filter!=null&&!filter.isEmpty()){
-            messages=messageRepo.findByTag(filter);
+    public String main(@RequestParam(required = false, defaultValue = "") String filter, Model model) {
+        Iterable<Message> messages = messageRepo.findAll();
+
+        if (filter != null && !filter.isEmpty()) {
+            messages = messageRepo.findByTag(filter);
+        } else {
+            messages = messageRepo.findAll();
         }
-        else{
-            messages=messageRepo.findAll();
-        }
+
         model.addAttribute("messages", messages);
         model.addAttribute("filter", filter);
+
         return "main";
     }
+
     @PostMapping("/main")
     public String add(
             @AuthenticationPrincipal User user,
             @Valid Message message,
             BindingResult bindingResult,
             Model model,
-            @RequestParam("file")MultipartFile file
-            ) throws IOException {
+            @RequestParam("file") MultipartFile file
+    ) throws IOException {
         message.setAuthor(user);
-        if (bindingResult.hasErrors()){
+
+        if (bindingResult.hasErrors()) {
             Map<String, String> errorsMap = ControllerUtils.getErrors(bindingResult);
 
             model.mergeAttributes(errorsMap);
@@ -74,18 +73,22 @@ public class MainController {
                 }
 
                 String uuidFile = UUID.randomUUID().toString();
-                String resultFileName = uuidFile + "." + file.getOriginalFilename();
+                String resultFilename = uuidFile + "." + file.getOriginalFilename();
 
-                file.transferTo(new File(uploadPath + "/" + resultFileName));
+                file.transferTo(new File(uploadPath + "/" + resultFilename));
 
-                message.setFilename(resultFileName);
+                message.setFilename(resultFilename);
             }
-            model.addAttribute("message",null);
+
+            model.addAttribute("message", null);
+
             messageRepo.save(message);
         }
+
         Iterable<Message> messages = messageRepo.findAll();
+
         model.addAttribute("messages", messages);
+
         return "main";
     }
-
 }

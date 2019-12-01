@@ -33,7 +33,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
             .authorizeRequests()
-                .antMatchers("/","/registration","/test","/static/**","/activate/*")
+                .antMatchers("/","/registration","/static/**","/activate/*")
                 .permitAll()
                 .anyRequest().authenticated()
             .and()
@@ -46,8 +46,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception{
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userService)
-        .passwordEncoder(passwordEncoder);
+                .passwordEncoder(passwordEncoder);
     }
 }
