@@ -66,8 +66,10 @@ public class MainController {
             @Valid Message message,
             BindingResult bindingResult,
             Model model,
-            @RequestParam("file") MultipartFile file
+            @RequestParam("file") MultipartFile file,
+            @PageableDefault(sort = {"id"},direction = Sort.Direction.DESC) Pageable pageable
     ) throws IOException {
+
         message.setAuthor(user);
 
         if (bindingResult.hasErrors()) {
@@ -80,12 +82,17 @@ public class MainController {
 
             model.addAttribute("message", null);
 
+
             messageRepo.save(message);
         }
 
-        Iterable<Message> messages = messageRepo.findAll();
 
-        model.addAttribute("messages", messages);
+        Page<Message> pages;
+        pages = messageRepo.findAll(pageable);
+        model.addAttribute("url","/main");
+        model.addAttribute("page",pages);
+
+        model.addAttribute("messages", message);
 
         return "main";
     }
@@ -115,6 +122,7 @@ public class MainController {
             @RequestParam(required = false) Message message,
             @PageableDefault(sort = {"id"},direction = Sort.Direction.DESC) Pageable pageable
     ) {
+
         Page<Message> page;
         page = messageRepo.findByAuthor(user, pageable);
 
@@ -125,6 +133,8 @@ public class MainController {
         model.addAttribute("page",page);
         model.addAttribute("message",message);
         model.addAttribute("isCurrentUser", currentUser.equals(user));
+
+        model.addAttribute("url", "/user-messages/{user}");
 
         return "userMessages";
     }

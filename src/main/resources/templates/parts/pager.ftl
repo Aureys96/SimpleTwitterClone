@@ -30,7 +30,7 @@
                     </li>
                 <#else>
                     <li class="page-item">
-                        <a class="page-link" href="${url}?page=${p - 1}&size=${20}" tabindex="-1">${p}</a>
+                        <a class="page-link" href="${url}?page=${p - 1}&size=20" tabindex="-1">${p}</a>
                     </li>
                 </#if>
             </#list>
