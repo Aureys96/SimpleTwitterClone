@@ -2,5 +2,4 @@
 /target/
 /src/main/resources/application.properties
 /sweatter.iml
-/src/main/resources/static/
-/resources/templates/test.mustache
+/src/test/resources/application-test.properties
